@@ -11,11 +11,11 @@
 <link rel="icon" href="icons/favicon-64.png?v=1" sizes="64x64"><link rel="icon" href="favicon.ico?v=1" sizes="any">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F3F5F8;--card:#fff;--soft:#EEF1F6;--soft2:#F6F8FC;--line:#E1E6EE;--ink:#1B2433;--ink2:#4A5C8C;--mute:#8C98B8;--head:#12307E;--acc:#2350E6;--accbg:#EAF0FF;
 --ok:#12875B;--okbg:#E2F4EC;--red:#D8412F;--redbg:#FCE9E4;--amb:#9A6300;--ambbg:#FFF4DA;--vio:#6A3BE0;--viobg:#F0EBFF;--edit:#FFF8E6;
---shadow:0 1px 2px rgba(18,48,126,.05),0 6px 20px -10px rgba(18,48,126,.22);--glass:rgba(243,245,248,.9);--f:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+--shadow:0 1px 2px rgba(18,48,126,.05),0 6px 20px -10px rgba(18,48,126,.22);--glass:rgba(243,245,248,.9);--f:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--d:"Unbounded","Onest",system-ui,sans-serif;--grad:linear-gradient(135deg,#8B6BFF 0%,#5B2BD6 48%,#2350E6 100%);--gsh:0 14px 34px -14px rgba(91,43,214,.65)}
 :root[data-theme=dark]{--bg:#0B0F1A;--card:#141A28;--soft:#1B2233;--soft2:#171E2D;--line:#252E42;--ink:#E8EDF8;--ink2:#A9B6D6;--mute:#6F7C9C;--head:#C9D6FF;--acc:#6F8FFF;--accbg:#1D2744;
 --ok:#43C98F;--okbg:#12301F;--red:#FF7A68;--redbg:#3A1C19;--amb:#F0B84F;--ambbg:#352914;--vio:#B39BFF;--viobg:#271E45;--edit:#2F2812;
 --shadow:0 1px 0 rgba(255,255,255,.03),0 10px 30px -12px rgba(0,0,0,.6);--glass:rgba(11,15,26,.9)}
@@ -213,6 +213,44 @@ textarea.fi{min-height:70px;resize:vertical;font-size:14px}
  .wbtn{display:inline-flex!important}
 }
 .wbtn{display:none}
+
+/* premium */
+.tt{font-family:var(--f)}
+.tt b{font-family:var(--d);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.tt span{margin-top:2px}
+.sht b,.drh b,.welcome h2{font-family:var(--d);letter-spacing:-.01em;font-weight:700}
+.hero{margin:6px 12px 0;border-radius:22px;padding:16px 16px 14px;background:var(--grad);color:#fff;box-shadow:var(--gsh);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-50px;top:-70px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
+.hero:after{content:"₽";position:absolute;right:16px;top:6px;font:800 64px var(--d);color:rgba(255,255,255,.09)}
+.hero span{display:block;font-size:11.5px;font-weight:600;opacity:.8;letter-spacing:.02em}
+.hero .h1 b{display:block;font:700 30px var(--d);letter-spacing:-.03em;margin-top:2px;font-variant-numeric:tabular-nums}
+.hero .h1 em{font-style:normal;font-size:12px;opacity:.75}
+.hero .h2{display:flex;align-items:flex-end;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18)}
+.hero .hm b{font:600 16px var(--d);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.hero .hm{flex:1}
+.dchip{border-radius:12px;padding:8px 12px;font:700 14px var(--d);letter-spacing:-.02em;background:#fff;white-space:nowrap}
+.dchip.g{color:#12875B}.dchip.y{color:#B26A00}.dchip.r{color:#D8412F}
+.tabs{margin:10px 12px 0}
+.tabs .on{color:var(--vio)}
+.hints{box-shadow:var(--shadow)}
+.hh{display:flex;gap:8px;align-items:center;width:100%;padding:10px 12px;text-align:left;font-size:13px}
+.hh span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
+.hh i{font-style:normal}.hh em{font-style:normal;font-weight:700;color:var(--vio);font-size:12px;white-space:nowrap}
+.logoi{width:42px;height:42px;border-radius:12px;flex:none}
+.sec{font-family:var(--f)}
+.sec .r.num{font:700 13px var(--d);color:var(--head);letter-spacing:-.01em}
+.cl .cv,.xt td.g,.foot .num,.op .s,.op.t .s{font-family:var(--d);font-weight:600;letter-spacing:-.02em;font-size:13.5px}
+.btn{background:var(--grad);box-shadow:var(--gsh)}
+.btn.v,.btn.s,.btn.r,.btn.g{box-shadow:none}
+.bb .dz b{font-family:var(--d);letter-spacing:-.02em}
+.foot{background:var(--viobg);color:var(--vio)}
+.op.t{background:var(--viobg)}.op.t .d,.op.t .s{color:var(--vio)}
+.sugg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;max-height:300px;overflow:auto}
+.sugg .sl{grid-column:1/-1;font-size:11.5px;color:var(--mute);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.sugg button{background:var(--soft);border-radius:11px;padding:8px 11px;font-weight:600;font-size:13.5px;color:var(--head);text-align:left;line-height:1.15}
+.sugg button small{display:block;font-size:10.5px;color:var(--vio);font-weight:700}
+.sugg button:active{background:var(--viobg)}
+@media(min-width:900px){.hero{margin:12px 20px 0;display:flex;align-items:center;gap:30px;padding:18px 24px}.hero .h2{margin:0;padding:0;border:0;flex:1;justify-content:flex-end;gap:28px}.hero .hm{flex:none}.hero:after{right:auto;left:46%}.tabs{display:none!important}}
 </style>
 </head>
 <body>
@@ -326,6 +364,16 @@ function hints(k,t){
 function routeMap(){const m=[];let r='Без маршрута';String(S.clientsList.text||'').split('\n').forEach(l=>{l=l.trim();if(!l)return;if(l[0]==='#'){r=l.replace(/^#+\s*/,'')||r;return}m.push({n:norm(l),name:l,r})});return m}
 function routeOf(name,m){const n=norm(name);if(!n)return'Без маршрута';let f=m.find(x=>x.n===n)||m.find(x=>x.n.startsWith(n)||n.startsWith(x.n));
   if(!f){const w=n.split(' ')[0];const c=m.filter(x=>x.n.split(' ')[0]===w);if(c.length===1||(c.length&&c.every(x=>x.r===c[0].r)))f=c[0]}return f?f.r:'Без маршрута'}
+const SEED=['Щеглова','Еньшина','Кунгуров','Дуюнова Тепличная','Оводова','Стельмухова','Храпенкова','Садоян','Зигора','Саркисян Давид','Саркисян Сережа','Дуюнова Тихая','Каграманова','Кондрахина','Акопян','Махов'];
+function freqNames(){const m={};SEED.forEach(n=>{m[norm(n)]={name:n,c:.5,last:''}});
+  S.kassas.forEach(k=>{if(k.deleted)return;k.clients.forEach(c=>{const n=norm(c.name);if(!n)return;const o=m[n]=m[n]||{name:c.name,c:0,last:''};o.c++;if(k.end>=o.last){o.last=k.end;o.name=cap(c.name)}})});
+  return Object.values(m).sort((a,b)=>b.c-a.c||a.name.localeCompare(b.name,'ru'))}
+let lastSugg=[];
+function suggHTML(k,c){const nq=norm(c.name);let arr=freqNames();
+  if(nq){const all=[...arr];routeMap().forEach(x=>{if(!all.some(y=>norm(y.name)===x.n))all.push({name:x.name,c:0})});
+    arr=all.filter(x=>{const n=norm(x.name);return n!==nq&&(n.startsWith(nq)||n.split(' ').some(w=>w.startsWith(nq)))})}
+  arr=arr.slice(0,nq?8:16);lastSugg=arr;if(!arr.length)return'';
+  return`<div class="sl">${nq?'Подходят':'Часто в кассе'}</div>`+arr.map((x,i)=>{const ex=k.clients.find(y=>y!==c&&norm(y.name)===norm(x.name));return`<button data-act="pick:${i}">${esc(x.name)}${ex?`<small>уже есть · ${fmt(ctot(ex))} — добавить сумму</small>`:''}</button>`}).join('')}
 function allNames(){const s=new Set();routeMap().forEach(x=>s.add(x.name));S.kassas.forEach(k=>!k.deleted&&k.clients.forEach(c=>c.name&&s.add(c.name.trim())));return[...s].sort((a,b)=>a.localeCompare(b,'ru'))}
 
 /* ---------- render ---------- */
@@ -346,37 +394,36 @@ function render0(){
 function syncDot(){return S.settings.url?`<i class="dot ${syncSt}"></i>${{ok:'сохранено в таблице',wait:'сохраняю…',err:'нет связи с таблицей',off:'нет интернета',local:'в телефоне'}[syncSt]||''}`:'<i class="dot"></i>только в этом устройстве'}
 function renderTop(k){
   const el=$('#top');
-  if(!k){el.innerHTML=`<div class="bar1 wrap"><button class="ib bur" data-act="drawer"><i></i></button><div class="tt"><b>Касса КМЗ</b><span>${syncDot()}</span></div></div>`;return}
-  const t=T(k),L=live(),i=L.findIndex(x=>x.id===k.id);
-  const kp=`<div class="kpis ${t.bs!=null?'k4':''}">
-    <div class="kv"><span>Забрано${t.bs!=null&&k.buh.mode==='add'?' + начало':''}</span><b>${fmt(t.target)}</b></div>
-    <div class="kv"><span>Опись</span><b>${fmt(t.opis)}</b></div>
-    <div class="kv ${lvl(t.diff)}"><span>${t.diff===0?'Сошлось':'Расхождение'}</span><b>${t.diff===0?'✓ 0':sgn(t.diff)}</b></div>
-    ${t.bs!=null?`<div class="kv ${k.buh.mode==='check'?lvl(t.buhDiff):''}"><span>Бухгалтерия</span><b>${fmt(t.bs)}</b></div>`:''}</div>`;
-  el.innerHTML=`<div class="wrap"><div class="bar1 topw">
+  if(!k){el.innerHTML=`<div class="bar1 wrap"><button class="ib bur" data-act="drawer"><i></i></button><div class="tt"><b>Касса КМЗ</b></div></div>`;return}
+  const L=live(),i=L.findIndex(x=>x.id===k.id);
+  el.innerHTML=`<div class="wrap"><div class="bar1">
     <button class="ib bur" data-act="drawer" aria-label="Меню"><i></i></button>
-    <div class="tt"><b>Касса ${ktitle(k)}</b><span>${k.type==='week'?'неделя':k.type==='day'?WD[pd(k.start).getDay()].toLowerCase():'период'} · ${k.clients.length} кл. · ${k.status==='done'?'сдано ✓':'черновик'} <i class="dot ${S.settings.url?syncSt:''}" title="${S.settings.url?'Google-таблица':'только в этом устройстве'}"></i></span></div>
-    <span class="wbtn" style="gap:8px;align-items:center">${kp}</span>
+    <button class="tt" data-act="kset" style="text-align:left"><b>${ktitle(k)}</b><span>${k.type==='week'?'касса за неделю':k.type==='day'?'касса за день':'касса за период'}${k.status==='done'?' · сдано ✓':''}</span></button>
     <button class="ib" data-act="undo" title="Отменить" ${undoSt.length?'':'disabled'}>↶</button>
     <button class="ib" data-act="nav:${i+1}" title="Предыдущая" ${i<L.length-1?'':'disabled'}>‹</button>
     <button class="ib" data-act="nav:${i-1}" title="Следующая" ${i>0?'':'disabled'}>›</button>
     <button class="btn v wbtn" data-act="report">Бухгалтеру</button>
-  </div>
-  <div class="phonly">${wide()?'':kp}</div>
-  <div class="tabs">${[['all','Всё вместе'],['cl','Клиенты'],['op','Опись']].map(([a,b])=>`<button class="${S.settings.tab===a?'on':''}" data-act="tab:${a}">${b}</button>`).join('')}</div></div>`;
+  </div></div>`;
 }
+function heroHTML(k){const t=T(k),L=lvl(t.diff);
+  return `<div class="hero"><div class="h1"><span>Забрано${t.bs!=null&&k.buh.mode==='add'?' + начало':''}</span><b>${fmt(t.target)}</b><em>${k.clients.length} клиентов · ${t.nsum} сумм</em></div>
+   <div class="h2"><div class="hm"><span>Опись</span><b>${fmt(t.opis)}</b></div>
+   <div class="dchip ${L}">${t.diff===0?'Сошлось ✓':sgn(t.diff)+' ₽'}</div>
+   ${t.bs!=null&&k.buh.mode==='check'?`<div class="hm"><span>Бухгалтерия</span><b>${fmt(t.bs)}</b></div>`:''}</div></div>
+   <div class="tabs">${[['all','Всё'],['cl','Клиенты'],['op','Опись']].map(([a,b])=>`<button class="${S.settings.tab===a?'on':''}" data-act="tab:${a}">${b}</button>`).join('')}</div>`}
+let hintsOpen=false;
 function renderBanners(k){
   const el=$('#banners');if(!k){el.innerHTML='';return}
-  const t=T(k);let h='';
+  const t=T(k);let h=heroHTML(k);
   if(k.status==='done')h+=`<div class="ban lock">✓ Касса сдана${k.doneAt?' '+dm(k.doneAt):''}. ${k.unlocked?'Открыта для правки — изменения записываются.':'Правка закрыта.'}<button data-act="${k.unlocked?'relock':'unlock'}">${k.unlocked?'Закрыть':'Исправить'}</button></div>`;
   const H=hints(k,t);
-  if(H.length)h+=`<div class="hints"><h4><span>${t.diff===0?'Проверка':'Где искать расхождение'}</span></h4>${H.map(x=>`<div class="hint"><i>${x.i}</i><div>${x.t}</div>${x.b?`<button data-act="${x.act}">${x.b}</button>`:''}</div>`).join('')}</div>`;
+  if(H.length)h+=`<div class="hints"><button class="hh" data-act="hints"><i>💡</i><span>${hintsOpen?(t.diff===0?'Проверка':'Где искать расхождение'):H[0].t.replace(/<[^>]+>/g,'')}</span><em>${H.length>1&&!hintsOpen?'+'+(H.length-1):''} ${hintsOpen?'▴':'▾'}</em></button>${hintsOpen?H.map(x=>`<div class="hint"><i>${x.i}</i><div>${x.t}</div>${x.b?`<button data-act="${x.act}">${x.b}</button>`:''}</div>`).join(''):''}</div>`;
   el.innerHTML=h;
 }
 function renderMain(k){
   const el=$('#main');
   if(!k){el.innerHTML=`<div class="welcome"><div class="logo">₽</div><h2>Касса КМЗ</h2><p>Касса за неделю или за день: клиенты, опись купюр, расхождение и отчёт бухгалтеру.</p>
-    <button class="btn" data-act="newk">+ Новая касса</button><button class="btn s" data-act="import">Загрузить из файла</button><button class="btn s" data-act="settings">Подключить Google-таблицу</button></div>`;return}
+    <button class="btn" data-act="newk">+ Новая касса</button><button class="btn s" data-act="import">Загрузить из файла</button></div>`;return}
   const tab=wide()?'all':S.settings.tab;
   el.innerHTML=`<div class="cols"><div class="pane" style="display:${tab==='op'?'none':'block'}">${clientsHTML(k)}</div><div class="pane" style="display:${tab==='cl'?'none':'block'}">${opisHTML(k)}</div></div>`;
 }
@@ -384,23 +431,22 @@ function sortedClients(k){
   let a=k.clients.map((c,i)=>({c,i}));
   const f=norm(filt);if(f){const n=pnum(filt);a=a.filter(({c})=>norm(c.name).includes(f)||(n!=null&&(ctot(c)===n||c.sums.some(s=>+s.a===n))))}
   if(onlyUnm)a=a.filter(({c})=>c.sums.some(s=>+s.a&&!s.m));
-  const so=S.settings.sort;
+  const so='input';
   const fd=c=>c.sums.map(s=>s.d).filter(Boolean).sort()[0]||'9';
   if(so==='sum')a.sort((x,y)=>ctot(y.c)-ctot(x.c));
   else if(so==='name')a.sort((x,y)=>x.c.name.localeCompare(y.c.name,'ru'));
   else if(so==='day')a.sort((x,y)=>fd(x.c).localeCompare(fd(y.c))||x.i-y.i);
   return a}
 function groups(k,a){
-  if(S.settings.sort!=='route')return[{g:null,a}];
+  return[{g:null,a}];
   const m=routeMap(),G={};const order=[];m.forEach(x=>{if(!order.includes(x.r))order.push(x.r)});
   a.forEach(o=>{const r=routeOf(o.c.name,m);(G[r]=G[r]||[]).push(o)});
   return Object.keys(G).sort((x,y)=>{const i=order.indexOf(x),j=order.indexOf(y);return(i<0?999:i)-(j<0?999:j)}).map(g=>({g,a:G[g]}))}
 function clientsHTML(k){
   const t=T(k),lk=locked(k),a=sortedClients(k),GR=groups(k,a);
   const tool=`<div class="tool"><input placeholder="🔍 Клиент или сумма" value="${esc(filt)}" data-act2="filt">
-    <select data-act2="sort">${[['input','Как вносил'],['sum','По сумме'],['name','По имени'],['day','По дню'],['route','По маршрутам']].map(([v,l])=>`<option value="${v}" ${S.settings.sort===v?'selected':''}>${l}</option>`).join('')}</select>
     ${t.unm?`<button class="um ${onlyUnm?'on':''}" data-act="onlyunm">без пометки: ${t.unm}</button>`:''}</div>`;
-  const head=`<div class="sec"><span>Клиенты · ${k.clients.length}</span><span class="r"><button class="lnk" data-act="addc">+ клиент</button></span></div>`;
+  const head=`<div class="sec"><span>Клиенты · ${k.clients.length}</span><span class="r num">${fmt(t.zab)}</span></div>`;
   if(!wide()){
     let rows='';
     GR.forEach(({g,a})=>{if(g)rows+=`<div class="grp">${esc(g)} · ${fmt(a.reduce((s,o)=>s+ctot(o.c),0))}</div>`;
@@ -409,7 +455,7 @@ function clientsHTML(k){
         rows+=`<div class="cl ${c.sums.some(s=>+s.a&&!s.m)?'unm':''}" data-act="editc:${c.id}" data-cid="${c.id}"><div class="nm">${esc(c.name)||'<i style="color:var(--mute)">без имени</i>'}${sub?`<small>${esc(sub)}</small>`:''}</div>
         <div class="cv">${fmt(ctot(c))}</div><button class="chip ${mk}" data-act="cyc:${c.id}">${MLBL[mk]}</button></div>`})});
     return head+tool+`<div class="box">${rows||`<div class="empty">${k.clients.length?'Ничего не найдено':'Пока пусто — добавь первого клиента'}</div>`}
-      ${lk?'':'<button class="addrow" data-act="addc">+ Клиент</button>'}<div class="foot"><span>Забрано</span><span class="num">${fmt(t.zab)}</span></div></div>`;
+      <div class="foot"><span>Забрано</span><span class="num">${fmt(t.zab)}</span></div></div>`;
   }
   // wide excel
   const ncol=Math.max(3,...k.clients.map(c=>c.sums.length+1));
@@ -426,7 +472,7 @@ function clientsHTML(k){
     h+=`<td class="g">${fmt(ctot(c))}</td><td class="k"><button class="chip ${mk}" data-act="cyc:${c.id}">${MLBL[mk]}</button></td><td class="x">${lk?'':`<button data-act="delc:${c.id}" title="Удалить">×</button>`}</td></tr>`;r++})});
   if(!lk)h+=`<tr><td class="i">+</td><td><input class="nm" data-f="newc" data-r="${r}" data-c="0" placeholder="+ клиент (имя, Enter)" list="dlN"></td><td colspan="${ncol+3}"></td></tr>`;
   h+=`<tr class="f"><td></td><td style="text-align:left">Забрано</td><td colspan="${ncol}"></td><td>${fmt(t.zab)}</td><td colspan="2"></td></tr></table>`;
-  return head+tool+`<div class="box" style="overflow-x:auto">${h}</div><datalist id="dlN">${allNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`;
+  return head+tool+`<div class="box" style="overflow-x:auto">${h}</div><datalist id="dlN">${[...new Set([...freqNames().map(x=>x.name),...allNames()])].map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`;
 }
 function opisHTML(k){
   const t=T(k),lk=locked(k),dis=lk?'disabled':'';
@@ -448,13 +494,12 @@ function opisHTML(k){
 function renderBB(k){const el=$('#bb');if(!k||wide()){el.style.display='none';return}el.style.display='flex';const t=T(k),L=lvl(t.diff);
   el.innerHTML=`<div class="dz">${t.diff===0?'Касса':t.diff<0?'Не хватает':'Лишние'}<b style="color:var(--${L==='g'?'ok':L==='y'?'amb':'red'})">${t.diff===0?'Сошлось ✓':sgn(t.diff)+' ₽'}</b></div><button class="btn v" data-act="report">Бухгалтеру</button>${locked(k)?'':'<button class="btn" data-act="addc">+ Клиент</button>'}`}
 function renderDrawer(){
-  const L=live(),k=K();let h=`<div class="drh"><div class="logo">₽</div><div><b>Касса КМЗ</b><span>${esc(S.settings.sign||'')}</span></div></div><div class="drb">
+  const L=live(),k=K();let h=`<div class="drh"><img class="logoi" src="icons/icon-192.png?v=1" alt=""><div><b>Касса КМЗ</b><span>${esc(S.settings.sign||'')}</span></div></div><div class="drb">
   <button class="dm" data-act="newk"><i>＋</i>Новая касса</button>
-  <button class="dm" data-act="search"><i>🔍</i>Поиск по всем кассам</button>
-  <button class="dm" data-act="summary"><i>📊</i>Сводка: недели и месяцы</button>
-  ${k?`<button class="dm" data-act="kset"><i>🗓</i>Период и сумма бухгалтерии</button><button class="dm" data-act="csv"><i>📗</i>Выгрузить в Excel</button>`:''}
+  <button class="dm" data-act="summary"><i>📊</i>Сводка по неделям и месяцам</button>
+  ${k?`<button class="dm" data-act="csv"><i>📗</i>Выгрузить в Excel</button>`:''}
   ${k&&k.log&&k.log.length?`<button class="dm" data-act="logv"><i>🕘</i>Изменения после сдачи · ${k.log.length}</button>`:''}
-  <button class="dm" data-act="settings"><i>⚙️</i>Настройки и Google-таблица</button>
+  <button class="dm" data-act="backup"><i>💾</i>Резервная копия</button>
   <button class="dm" data-act="theme"><i>${document.documentElement.dataset.theme==='dark'?'☀️':'🌙'}</i>${document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}</button>
   <div class="dl">Кассы</div>`;
   let lastM='';L.forEach(x=>{const m=MON[pd(x.end).getMonth()]+' '+pd(x.end).getFullYear();if(m!==lastM){h+=`<div class="dl" style="margin-top:6px;text-transform:none">${m}</div>`;lastM=m}
@@ -480,7 +525,7 @@ function edHTML(k,c){const lk=locked(k),dis=lk?'disabled':'',days=daysOf(k);
     <span class="tg"><button class="n ${s.m==='n'?'on':''}" data-act="em:${i}:n" ${dis}>Нал</button><button class="c ${s.m==='c'?'on':''}" data-act="em:${i}:c" ${dis}>Карта</button></span>
     ${lk?'<span></span>':`<button class="xb" data-act="edel:${i}">×</button>`}</div>`).join('');
   return `<div class="sht"><b>${edNew?'Новый клиент':'Клиент'}</b><span class="num" style="font-weight:800;color:var(--head);font-size:18px" id="edTot">${fmt(ctot(c))}</span></div>
-  <input class="fi" data-e="name" value="${esc(c.name)}" placeholder="Имя клиента" list="dlN2" autocomplete="off" ${dis}><datalist id="dlN2">${allNames().map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+  <input class="fi" data-e="name" value="${esc(c.name)}" placeholder="Начни вводить имя" autocomplete="off" ${dis}>${lk?'':`<div class="sugg" id="sugg">${suggHTML(k,c)}</div>`}
   <div id="edDup"></div>
   <div class="lbl">Суммы ${k.type!=='day'?'(можно указать день недели)':''}</div><div id="edS">${sums}</div>
   ${lk?'':`<button class="add" data-act="eadd">+ сумма</button><div class="qk"><button data-act="eall:n">Всё нал</button><button data-act="eall:c">Всё карта</button><button data-act="eall:">Снять пометки</button></div>`}
@@ -631,7 +676,7 @@ document.addEventListener('click',e=>{
   case'tab':S.settings.tab=p[1];persist(true);render();scrollTo(0,0);break;
   case'open':S.cur=p[1];undoSt=[];persist(true);drawer(false);if(shOn)closeSheet();render();break;
   case'newk':drawer(false);kForm(true);break;
-  case'kset':drawer(false);kForm(false);break;
+  case'kset':drawer(false);if(k)kForm(false);break;
   case'nkt':readKF();nk.type=p[1];if(p[1]==='week')nk.end=weekEnd(nk.start);drawKF(p[2]==='1');break;
   case'nkm':readKF();nk.buhMode=p[1];drawKF(p[2]==='1');break;
   case'nkok':readKF();newKassa({type:nk.type,start:nk.start,end:nk.end,buhSum:nk.buhSum,buhMode:nk.buhMode});undoSt=[];persist();closeSheet();toast('Касса создана');break;
@@ -661,7 +706,8 @@ document.addEventListener('click',e=>{
   case'goto':S.cur=p[1];flashId=p[2];undoSt=[];persist(true);closeSheet();break;
   case'summary':drawer(false);summary();break;
   case'sm':smode=p[1];summary();break;
-  case'settings':drawer(false);settingsUI();break;
+  case'settings':case'backup':drawer(false);openSheet(`<div class="sht"><b>Резервная копия</b></div><div class="note" style="margin-bottom:12px">Касса хранится в этом браузере. Раз в неделю скачивай копию — если сменишь телефон или очистишь браузер, из неё всё восстановится.</div><div class="row2"><button class="btn s" data-act="export">Скачать копию</button><button class="btn" data-act="import">Загрузить копию</button></div>`,'bk');break;
+  case'hints':hintsOpen=!hintsOpen;render();break;
   case'syncnow':saveSettings();if(!S.settings.url){toast('Сначала вставь адрес таблицы');break}pullSync().then(()=>toast(syncSt==='ok'?'Синхронизировано':'Не получилось — проверь адрес и ключ'));break;
   case'export':{const d=JSON.stringify({kassas:S.kassas,clientsList:S.clientsList},null,1);dl(new Blob([d],{type:'application/json'}),'kassa-kopiya-'+today()+'.json');break}
   case'import':drawer(false);$('#fileIn').click();break;
@@ -670,6 +716,11 @@ document.addEventListener('click',e=>{
   case'logv':{drawer(false);const L=(k.log||[]).slice().reverse();openSheet(`<div class="sht"><b>Изменения после сдачи</b></div>${L.map(x=>{const d=new Date(x.t);return`<div class="log"><span>${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</span>${esc(x.x)}</div>`}).join('')}`,'log');break}
   case'closesh':closeSheet();break;
   // editor
+  case'pick':{const[k2,c]=edCur();const x=lastSugg[+p[1]];if(!c||!x)break;const ex=k2.clients.find(y=>y!==c&&norm(y.name)===norm(x.name));
+    if(ex){const vals=c.sums.filter(s=>s.a!=null&&s.a!=='');ex.sums.push(...vals);if(!vals.length)ex.sums.push({a:null,m:lastMark(ex),d:defDay(k2)});
+      if(c.note)ex.note=[ex.note,c.note].filter(Boolean).join('; ');k2.clients=k2.clients.filter(y=>y!==c);shOn='ed:'+ex.id;edNew=false}
+    else c.name=x.name;
+    touch(k2);edRefresh();render();setTimeout(()=>{const ins=[...$('#sh').querySelectorAll('[data-e^="a:"]')];const e=ins.find(i=>!i.value)||ins[ins.length-1];e&&e.focus()},60);break}
   case'eadd':{const[k2,c]=edCur();if(!c)break;c.sums.push({a:null,m:lastMark(c),d:defDay(k2)});touch(k2);edRefresh();const ins=$('#sh').querySelectorAll('[data-e^="a:"]');ins.length&&ins[ins.length-1].focus();break}
   case'em':{const[k2,c]=edCur();if(!c)break;const s=c.sums[+p[1]];s.m=s.m===p[2]?'':p[2];touch(k2);edRefresh();render();break}
   case'eall':{const[k2,c]=edCur();if(!c)break;c.sums.forEach(s=>s.m=p[1]||'');touch(k2);edRefresh();render();break}
@@ -689,7 +740,7 @@ document.addEventListener('input',e=>{const t=e.target,k=K();
   if(t.dataset.e){const[k2,c]=edCur();if(!c)return;const[f,i]=t.dataset.e.split(':');
     if(f==='name')c.name=t.value;else if(f==='note')c.note=t.value;else if(f==='a'){const s=c.sums[+i];s.a=t.value.trim()===''?null:pnum(t.value);}else if(f==='d')c.sums[+i].d=t.value;
     const te=$('#edTot');if(te)te.textContent=fmt(ctot(c));
-    if(f==='name'){const d=dupCheck(k2,c);$('#edDup').innerHTML=d?`<div class="note" style="color:var(--amb)">⚠ «${esc(d.name)}» уже есть в этой кассе — при «Готово» предложу объединить</div>`:''}
+    if(f==='name'){const sg=$('#sugg');if(sg)sg.innerHTML=suggHTML(k2,c);const d=dupCheck(k2,c);$('#edDup').innerHTML=d?`<div class="note" style="color:var(--amb)">⚠ «${esc(d.name)}» уже есть в этой кассе — при «Готово» предложу объединить</div>`:''}
     touch(k2);render();return}
   if(!t.dataset.f||!k)return;const[f,a,b]=t.dataset.f.split(':');
   if(f==='den'){k.opis[a]=t.value===''?null:Math.max(0,parseInt(t.value.replace(/\D/g,''))||0)}
