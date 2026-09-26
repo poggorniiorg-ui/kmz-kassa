@@ -97,7 +97,7 @@ input,select,textarea{font:inherit;color:var(--ink)}
 .xt td.x{width:30px;text-align:center}
 .xt td.x button{color:var(--red);opacity:.5;font-weight:800;padding:6px}
 .xt td.x button:hover{opacity:1}
-.xt input{width:100%;min-width:66px;border:0;background:transparent;padding:8px;text-align:right;outline:none;border-radius:0}
+.xt input{width:100%;min-width:60px;border:0;background:transparent;padding:8px;text-align:right;outline:none;border-radius:0}
 .xt input.nm{text-align:left;font-weight:600;min-width:170px}
 .xt input:focus{background:var(--edit);box-shadow:inset 0 0 0 2px #F5B700}
 .xt input.dim{color:var(--mute)}
@@ -210,13 +210,15 @@ textarea.fi{min-height:70px;resize:vertical;font-size:14px}
  .topw{display:flex;align-items:center;gap:12px}
  .tabs,.bb{display:none!important}
  .main{padding:10px 20px}
- .cols{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(320px,1fr);gap:16px;align-items:start}
+ .cols{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
  .pane{display:block!important}
  .ban,.hints{margin:10px 20px 0}
  #banners{padding:0}
  .wbtn{display:inline-flex!important}
 }
 .wbtn{display:none}
+@media(min-width:1240px){.cols{grid-template-columns:minmax(0,2.3fr) minmax(330px,1fr)!important}}
+@media(min-width:900px) and (max-width:1239px){.cols>.pane:last-child{max-width:560px}}
 
 /* premium */
 .tt{font-family:var(--f)}
@@ -314,7 +316,7 @@ function T(k){
   let zab=0,card=0,unm=0,nsum=0;
   k.clients.forEach(c=>c.sums.forEach(s=>{const a=+s.a||0;zab+=a;nsum++;if(s.m==='c')card+=a;if(!s.m&&a)unm++}));
   let cash=0;DEN.forEach(d=>cash+=d*(+k.opis[d]||0));cash+=(+k.coins||0);
-  const cardV=k.cardAuto?card:(+k.cardManual||0);
+  const cardV=+k.cardManual||0;
   let out=0;k.out.forEach(o=>out+=(+o.a||0));
   const opis=cash+cardV+out;
   const bs=k.buh&&k.buh.sum!=null?+k.buh.sum:null;
@@ -378,9 +380,8 @@ function hints(k,t){
     if(ad%9===0&&ad>=90&&ad<100000)H.push({i:'🔁',t:'Разница делится на 9 — похоже на <b>перестановку двух цифр</b> (как 25 592 → 25 952). Сверь суммы с запиской'});
     if(/^[1-9]0{2,}$/.test(String(ad)))H.push({i:'🔢',t:`Разница ${fmt(ad)} — похоже на <b>подмену одной цифры</b> (как 13 203 → 13 303). Сверь сотни и тысячи`});
     if([99,100,199,200].includes(ad)&&d<0)H.push({i:'💳',t:'Похоже на списания с карты (уведомления 99 ₽, связь 100 ₽) — вычти их из «Карты»'});
-    if(t.unm&&k.cardAuto)H.push({i:'🏷',t:`${t.unm} сумм без пометки Нал/Карта — если среди них карта, опись изменится`});
     if(ad<100)H.push({i:'🪙',t:'Меньше 100 ₽ — обычно монеты, сдача или округление. Пересчитай монеты'});
-  }else if(t.unm&&k.cardAuto&&t.zab)H.push({i:'🏷',t:`${t.unm} сумм без пометки Нал/Карта`});
+  }
   if(k.status!=='done'&&today()>addD(k.end,2))H.push({i:'📅',t:`Касса за ${ktitle(k)} ещё не сдана — сдать и начать новую?`});
   if(t.buhDiff)H.push({i:'📄',t:`Забрано ${t.buhDiff>0?'больше':'меньше'} суммы бухгалтерии на ${fmt(Math.abs(t.buhDiff))}`});
   return H.slice(0,10)}
@@ -423,7 +424,7 @@ function renderTop(k){
   const L=live(),i=L.findIndex(x=>x.id===k.id);
   el.innerHTML=`<div class="wrap"><div class="bar1">
     <button class="ib bur" data-act="drawer" aria-label="Меню"><i></i></button>
-    <button class="tt" data-act="kset" style="text-align:left"><b>${ktitle(k)}</b><span>${k.type==='week'?'касса за неделю':k.type==='day'?'касса за день':'касса за период'}${k.status==='done'?' · сдано ✓':''}</span></button>
+    <button class="tt" data-act="kset" style="text-align:left"><b>${ktitle(k)}</b><span>${k.type==='week'?'касса за неделю':k.type==='day'?'касса за день':'касса за период'}${k.status==='done'?' · сдано ✓':''}${S.settings.url?` · <i class="dot ${syncSt}"></i>${{ok:'синхронизировано',wait:'сохраняю…',err:'нет связи',off:'нет интернета',local:'синхр.'}[syncSt]||''}`:''}</span></button>
     <button class="ib" data-act="undo" title="Отменить" ${undoSt.length?'':'disabled'}>↶</button>
     <button class="ib" data-act="nav:${i+1}" title="Предыдущая" ${i<L.length-1?'':'disabled'}>‹</button>
     <button class="ib" data-act="nav:${i-1}" title="Следующая" ${i>0?'':'disabled'}>›</button>
@@ -482,7 +483,7 @@ function clientsHTML(k){
       <div class="foot"><span>Забрано</span><span class="num">${fmt(t.zab)}</span></div></div>`;
   }
   // wide excel
-  const ncol=Math.max(3,...k.clients.map(c=>c.sums.length+1));
+  const ncol=Math.max(2,...k.clients.map(c=>c.sums.length+1));
   let h=`<table class="xt"><tr><th>#</th><th>Клиент</th>${Array.from({length:ncol},(_,i)=>`<th>Сумма ${i+1}</th>`).join('')}<th>Итого</th><th style="text-align:center">Н / К</th><th></th></tr>`;
   let r=0;
   GR.forEach(({g,a})=>{if(g)h+=`<tr><td colspan="${ncol+5}" class="grp" style="text-align:left">${esc(g)} · ${fmt(a.reduce((s,o)=>s+ctot(o.c),0))}</td></tr>`;
@@ -490,11 +491,11 @@ function clientsHTML(k){
     h+=`<tr data-cid="${c.id}" class="xr"><td class="i" data-act="editc:${c.id}" title="Подробно">${i+1}</td>
       <td><input class="nm" data-f="cname:${c.id}" data-r="${r}" data-c="0" value="${esc(c.name)}" list="dlN" ${lk?'disabled':''}></td>`;
     for(let j=0;j<ncol;j++){const s=c.sums[j];
-      if(s)h+=`<td><input data-f="sum:${c.id}:${j}" data-r="${r}" data-c="${j+1}" inputmode="decimal" value="${s.a==null?'':fmt(s.a)}" class="${sumWarn(k,c,j)?'warn':''}" title="${sumWarn(k,c,j)?'⚠ '+sumWarn(k,c,j)+' · ':''}${s.d?WD[pd(s.d).getDay()]+' '+dm(s.d):''}${s.m?' · '+(s.m==='n'?'нал':'карта'):''}" ${lk?'disabled':''} style="${s.m==='c'?'color:var(--acc)':''}">${k.type!=='day'&&s.d?`<span class="ds">${WD[pd(s.d).getDay()]} ${dm(s.d)}</span>`:''}</td>`;
+      if(s)h+=`<td><input data-f="sum:${c.id}:${j}" data-r="${r}" data-c="${j+1}" inputmode="decimal" value="${s.a==null?'':fmt(s.a)}" class="${sumWarn(k,c,j)?'warn':''}" title="${sumWarn(k,c,j)?'⚠ '+sumWarn(k,c,j)+' · ':''}${s.d?WD[pd(s.d).getDay()]+' '+dm(s.d):''}${s.m?' · '+(s.m==='n'?'нал':'карта'):''}" ${lk?'disabled':''} style="${s.m==='c'?'color:var(--acc)':''}"></td>`;
       else if(j===c.sums.length&&!lk)h+=`<td><input class="dim" data-f="sum:${c.id}:${j}" data-r="${r}" data-c="${j+1}" inputmode="decimal" placeholder="—"></td>`;
       else h+=`<td style="color:var(--line);padding-right:10px">—</td>`}
     h+=`<td class="g">${fmt(ctot(c))}</td><td class="k"><button class="chip ${mk}" data-act="cyc:${c.id}">${MLBL[mk]}</button></td><td class="x">${lk?'':`<button data-act="delc:${c.id}" title="Удалить">×</button>`}</td></tr>`;r++})});
-  if(!lk)h+=`<tr><td class="i">+</td><td><input class="nm" data-f="newc" data-r="${r}" data-c="0" placeholder="+ клиент (имя, Enter)" list="dlN"></td><td colspan="${ncol+3}"></td></tr>`;
+  if(!lk)h+=`<tr><td class="i">+</td><td><input class="nm" data-f="newc" data-r="${r}" data-c="0" placeholder="+ клиент" list="dlN"></td><td colspan="${ncol+3}"></td></tr>`;
   h+=`<tr class="f"><td></td><td style="text-align:left">Забрано</td><td colspan="${ncol}"></td><td>${fmt(t.zab)}</td><td colspan="2"></td></tr></table>`;
   return head+tool+`<div class="box" style="overflow-x:auto">${h}</div><datalist id="dlN">${[...new Set([...freqNames().map(x=>x.name),...allNames()])].map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`;
 }
@@ -659,7 +660,7 @@ function csv(){const k=K();if(!k)return;const t=T(k);const n=Math.max(5,...k.cli
 
 /* ---------- sync ---------- */
 let syncSt='local',syncT=null,syncing=false;
-function setSync(s){syncSt=s;const e=document.querySelector('.tt span');if(e)renderTop(K())}
+function setSync(s){syncSt=s;renderTop(K())}
 function scheduleSync(){if(!S.settings.url)return;S.dirty=true;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}setSync('wait');clearTimeout(syncT);syncT=setTimeout(pushSync,2000)}
 function mergeInto(d){if(!d)return false;let ch=false;(d.kassas||[]).forEach(r=>{const i=S.kassas.findIndex(x=>x.id===r.id);if(i<0){S.kassas.push(r);ch=true}else if((r.upd||0)>(S.kassas[i].upd||0)){S.kassas[i]=r;ch=true}});
   if(d.clientsList&&(d.clientsList.upd||0)>(S.clientsList.upd||0)){S.clientsList=d.clientsList;ch=true}return ch}
@@ -721,7 +722,7 @@ document.addEventListener('click',e=>{
   case'goto':S.cur=p[1];flashId=p[2];undoSt=[];persist(true);closeSheet();break;
   case'summary':drawer(false);summary();break;
   case'sm':smode=p[1];summary();break;
-  case'settings':case'backup':drawer(false);openSheet(`<div class="sht"><b>Резервная копия</b></div><div class="note" style="margin-bottom:12px">Касса хранится в этом браузере. Раз в неделю скачивай копию — если сменишь телефон или очистишь браузер, из неё всё восстановится.</div><div class="row2"><button class="btn s" data-act="export">Скачать копию</button><button class="btn" data-act="import">Загрузить копию</button></div>`,'bk');break;
+  case'settings':case'backup':drawer(false);openSheet(`<div class="sht"><b>Резервная копия</b></div><div class="note" style="margin-bottom:12px">Касса хранится в этом браузере. Раз в неделю скачивай копию — если сменишь телефон или очистишь браузер, из неё всё восстановится.</div><div class="row2"><button class="btn s" data-act="export">Скачать копию</button><button class="btn" data-act="import">Загрузить копию</button></div>${S.settings.url?`<div class="note" style="margin-top:14px">Синхронизация телефон ↔ компьютер: <b>${{ok:'работает ✓',wait:'сохраняю…',err:'нет связи с таблицей',off:'нет интернета',local:'подключена'}[syncSt]}</b></div><div class="row2"><button class="btn s" data-act="syncnow">Синхронизировать сейчас</button></div>`:''}`,'bk');break;
   case'hints':hintsOpen=!hintsOpen;render();break;
   case'syncnow':saveSettings();if(!S.settings.url){toast('Сначала вставь адрес таблицы');break}pullSync().then(()=>toast(syncSt==='ok'?'Синхронизировано':'Не получилось — проверь адрес и ключ'));break;
   case'export':{const d=JSON.stringify({kassas:S.kassas,clientsList:S.clientsList},null,1);dl(new Blob([d],{type:'application/json'}),'kassa-kopiya-'+today()+'.json');break}
@@ -798,7 +799,9 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(!S.
 let tx=null;document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
 document.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(tx<24&&dx>70)drawer(true);if($('#dr').classList.contains('on')&&dx<-70)drawer(false);tx=null},{passive:true});
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+(function(){const m=location.hash.match(/sync=([^&]+)/);if(m){try{const v=decodeURIComponent(escape(atob(decodeURIComponent(m[1])))).split('|');S.settings.url=v[0];S.settings.key=v[1]||'';persist(true);toast('Синхронизация подключена')}catch(e){toast('Ссылка синхронизации не подошла')}history.replaceState(null,'',location.pathname)}})();
 syncSt=S.settings.url?(S.dirty?'wait':'local'):'local';
+setInterval(()=>{if(S.settings.url&&document.visibilityState==='visible'&&!syncing&&!S.dirty&&!document.activeElement.matches('input,textarea,select'))pullSync()},30000);
 render();if(S.settings.url)pullSync();
 </script>
 </body>
