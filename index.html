@@ -146,6 +146,7 @@ input,select,textarea{font:inherit;color:var(--ink)}
 .dl{font-size:11px;color:var(--mute);font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin:12px 12px 6px}
 .ki{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;border-radius:12px;text-align:left}
 .ki.on{background:var(--card);box-shadow:var(--shadow)}
+.kdel{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--mute);font-weight:800;font-size:16px;flex:none}.kdel:hover{background:var(--redbg);color:var(--red)}
 .ki .a{flex:1;min-width:0}.ki .a b{display:block;font-size:13.5px;color:var(--head)}.ki .a span{font-size:11.5px;color:var(--mute)}
 .bd{font-size:11px;font-weight:800;border-radius:8px;padding:3px 7px;white-space:nowrap}
 .bd.g{background:var(--okbg);color:var(--ok)}.bd.y{background:var(--ambbg);color:var(--amb)}.bd.r{background:var(--redbg);color:var(--red)}.bd.s{background:var(--soft);color:var(--mute)}
@@ -299,12 +300,12 @@ const MON=['январь','февраль','март','апрель','май','�
 /* ---------- state ---------- */
 function blank(){return{v:1,kassas:[],clientsList:{text:'',upd:0},cur:null,dirty:false,settings:{url:'',key:'',theme:'',sort:'input',payday:4,sign:'ТП Подгорный',tab:'all'}}}
 function load(){try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.kassas){const b=blank();s.settings=Object.assign(b.settings,s.settings||{});if(!s.settings.v2){s.settings.payday=4;s.settings.sign='ТП Подгорный';s.settings.v2=1}s.clientsList=s.clientsList||b.clientsList;return s}}catch(e){}return blank()}
-let S=load();
+let S=load();S.kassas.forEach(k=>{if(k.cardAuto){let c=0;(k.clients||[]).forEach(x=>x.sums.forEach(s=>{if(s.m==='c')c+=+s.a||0}));k.cardAuto=false;if(k.cardManual==null&&c)k.cardManual=c}});
 let saveT=null;
 function persist(noSync){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast('Не удалось сохранить в памяти телефона')}if(!noSync)scheduleSync()}
 const live=()=>S.kassas.filter(k=>!k.deleted).sort((a,b)=>b.end.localeCompare(a.end)||b.start.localeCompare(a.start));
 function K(){let k=S.kassas.find(x=>x.id===S.cur&&!x.deleted);if(!k){k=live()[0]||null;S.cur=k?k.id:null}return k}
-function newKassa(o){const k={id:uid(),type:o.type||'week',start:o.start,end:o.end,status:'draft',clients:[],opis:{},coins:null,cardAuto:true,cardManual:null,
+function newKassa(o){const k={id:uid(),type:o.type||'week',start:o.start,end:o.end,status:'draft',clients:[],opis:{},coins:null,cardAuto:false,cardManual:null,
   out:[{id:uid(),name:'Зарплата',a:null},{id:uid(),name:'Аренда',a:null}],buh:{sum:o.buhSum==null?null:o.buhSum,mode:o.buhMode||'check'},log:[],upd:Date.now()};
   S.kassas.push(k);S.cur=k.id;return k}
 
@@ -332,8 +333,8 @@ const MLBL={n:'Нал',c:'Карта',z:'—',m:'Н+К',p:'½'};
 let undoSt=[];
 function snap(){const k=K();if(!k)return;undoSt.push({id:k.id,j:JSON.stringify(k)});if(undoSt.length>60)undoSt.shift()}
 function undo(){const u=undoSt.pop();if(!u)return;const i=S.kassas.findIndex(x=>x.id===u.id);if(i<0)return;const o=JSON.parse(u.j);o.upd=Date.now();S.kassas[i]=o;S.cur=o.id;persist();render();toast('Отменено')}
-function locked(k){return k&&k.status==='done'&&!k.unlocked}
-function logc(k,t){if(k.status==='done'||k.unlocked){k.log=k.log||[];k.log.push({t:Date.now(),x:t});if(k.log.length>300)k.log.shift()}}
+function locked(k){return false}
+function logc(k,t){return;if(k.status==='done'||k.unlocked){k.log=k.log||[];k.log.push({t:Date.now(),x:t});if(k.log.length>300)k.log.shift()}}
 function mut(fn,msg){const k=K();if(!k)return;if(locked(k)){askUnlock();return}snap();fn(k);k.upd=Date.now();if(msg)logc(k,msg);persist();render()}
 function touch(k,msg){k.upd=Date.now();if(msg)logc(k,msg);clearTimeout(saveT);saveT=setTimeout(()=>persist(),600)}
 
@@ -397,7 +398,7 @@ function suggHTML(k,c){const nq=norm(c.name);let arr=freqNames();
   if(nq){const all=[...arr];routeMap().forEach(x=>{if(!all.some(y=>norm(y.name)===x.n))all.push({name:x.name,c:0})});
     arr=all.filter(x=>{const n=norm(x.name);return n!==nq&&(n.startsWith(nq)||n.split(' ').some(w=>w.startsWith(nq)))})}
   arr=arr.slice(0,nq?8:16);lastSugg=arr;if(!arr.length)return'';
-  return`<div class="sl">${nq?'Подходят':'Часто в кассе'}</div>`+arr.map((x,i)=>{const ex=k.clients.find(y=>y!==c&&norm(y.name)===norm(x.name));return`<button data-act="pick:${i}">${esc(x.name)}${ex?`<small>уже есть · ${fmt(ctot(ex))} — добавить сумму</small>`:''}</button>`}).join('')}
+  return`<div class="sl">${nq?'Подходят':'Часто в кассе'}</div>`+arr.map((x,i)=>{const ex=k.clients.find(y=>y!==c&&norm(y.name)===norm(x.name));return`<button data-act="pick:${i}">${esc(x.name)}${ex?`<small>+ к ${fmt(ctot(ex))}</small>`:''}</button>`}).join('')}
 function allNames(){const s=new Set();routeMap().forEach(x=>s.add(x.name));S.kassas.forEach(k=>!k.deleted&&k.clients.forEach(c=>c.name&&s.add(c.name.trim())));return[...s].sort((a,b)=>a.localeCompare(b,'ru'))}
 
 /* ---------- render ---------- */
@@ -439,7 +440,6 @@ let hintsOpen=false;
 function renderBanners(k){
   const el=$('#banners');if(!k){el.innerHTML='';return}
   const t=T(k);let h=heroHTML(k);
-  if(k.status==='done')h+=`<div class="ban lock">✓ Касса сдана${k.doneAt?' '+dm(k.doneAt):''}. ${k.unlocked?'Открыта для правки — изменения записываются.':'Правка закрыта.'}<button data-act="${k.unlocked?'relock':'unlock'}">${k.unlocked?'Закрыть':'Исправить'}</button></div>`;
   const H=hints(k,t);
   if(H.length)h+=`<div class="hints"><button class="hh" data-act="hints"><i>💡</i><span>${hintsOpen?(t.diff===0?'Проверка':'Где искать расхождение'):H[0].t.replace(/<[^>]+>/g,'')}</span><em>${H.length>1&&!hintsOpen?'+'+(H.length-1):''} ${hintsOpen?'▴':'▾'}</em></button>${hintsOpen?H.map(x=>`<div class="hint"><i>${x.i}</i><div>${x.t}</div>${x.b?`<button data-act="${x.act}">${x.b}</button>`:''}</div>`).join(''):''}</div>`;
   el.innerHTML=h;
@@ -469,14 +469,14 @@ function groups(k,a){
 function clientsHTML(k){
   const t=T(k),lk=locked(k),a=sortedClients(k),GR=groups(k,a);
   const tool=`<div class="tool"><input placeholder="🔍 Клиент или сумма" value="${esc(filt)}" data-act2="filt">
-    ${t.unm?`<button class="um ${onlyUnm?'on':''}" data-act="onlyunm">без пометки: ${t.unm}</button>`:''}</div>`;
+</div>`;
   const head=`<div class="sec"><span>Клиенты · ${k.clients.length}</span><span class="r num">${fmt(t.zab)}</span></div>`;
   if(!wide()){
     let rows='';
     GR.forEach(({g,a})=>{if(g)rows+=`<div class="grp">${esc(g)} · ${fmt(a.reduce((s,o)=>s+ctot(o.c),0))}</div>`;
       a.forEach(({c})=>{const mk=markOf(c),n=c.sums.filter(s=>+s.a).length;const days=[...new Set(c.sums.map(s=>s.d).filter(Boolean))].map(d=>WD[pd(d).getDay()]).join(', ');
-        const sub=[clientWarn(k,c)?'⚠ проверь сумму':'',n>1?n+' сумм'+(n<5?'ы':''):'',days,c.note?'📝 '+c.note:''].filter(Boolean).join(' · ');
-        rows+=`<div class="cl ${c.sums.some(s=>+s.a&&!s.m)?'unm':''}" data-act="editc:${c.id}" data-cid="${c.id}"><div class="nm">${esc(c.name)||'<i style="color:var(--mute)">без имени</i>'}${sub?`<small>${esc(sub)}</small>`:''}</div>
+        const sub=[clientWarn(k,c)?'⚠ проверь сумму':'',n>1?n+' сумм'+(n<5?'ы':''):'',days].filter(Boolean).join(' · ');
+        rows+=`<div class="cl" data-act="editc:${c.id}" data-cid="${c.id}"><div class="nm">${esc(c.name)||'<i style="color:var(--mute)">без имени</i>'}${sub?`<small>${esc(sub)}</small>`:''}</div>
         <div class="cv">${fmt(ctot(c))}</div><button class="chip ${mk}" data-act="cyc:${c.id}">${MLBL[mk]}</button></div>`})});
     return head+tool+`<div class="box">${rows||`<div class="empty">${k.clients.length?'Ничего не найдено':'Пока пусто — добавь первого клиента'}</div>`}
       <div class="foot"><span>Забрано</span><span class="num">${fmt(t.zab)}</span></div></div>`;
@@ -487,7 +487,7 @@ function clientsHTML(k){
   let r=0;
   GR.forEach(({g,a})=>{if(g)h+=`<tr><td colspan="${ncol+5}" class="grp" style="text-align:left">${esc(g)} · ${fmt(a.reduce((s,o)=>s+ctot(o.c),0))}</td></tr>`;
     a.forEach(({c,i})=>{const mk=markOf(c);
-    h+=`<tr data-cid="${c.id}" class="xr ${c.sums.some(s=>+s.a&&!s.m)?'unm':''}"><td class="i" data-act="editc:${c.id}" title="Подробно">${i+1}</td>
+    h+=`<tr data-cid="${c.id}" class="xr"><td class="i" data-act="editc:${c.id}" title="Подробно">${i+1}</td>
       <td><input class="nm" data-f="cname:${c.id}" data-r="${r}" data-c="0" value="${esc(c.name)}" list="dlN" ${lk?'disabled':''}></td>`;
     for(let j=0;j<ncol;j++){const s=c.sums[j];
       if(s)h+=`<td><input data-f="sum:${c.id}:${j}" data-r="${r}" data-c="${j+1}" inputmode="decimal" value="${s.a==null?'':fmt(s.a)}" class="${sumWarn(k,c,j)?'warn':''}" title="${sumWarn(k,c,j)?'⚠ '+sumWarn(k,c,j)+' · ':''}${s.d?WD[pd(s.d).getDay()]+' '+dm(s.d):''}${s.m?' · '+(s.m==='n'?'нал':'карта'):''}" ${lk?'disabled':''} style="${s.m==='c'?'color:var(--acc)':''}">${k.type!=='day'&&s.d?`<span class="ds">${WD[pd(s.d).getDay()]} ${dm(s.d)}</span>`:''}</td>`;
@@ -504,8 +504,7 @@ function opisHTML(k){
   DEN.forEach(d=>{const n=k.opis[d];h+=`<div class="op"><div class="d">${fmt(d)}</div><div class="st"><button data-act="st:${d}:-1" ${dis}>−</button><input data-f="den:${d}" inputmode="numeric" value="${n==null||n===''?'':(Number.isInteger(+n)?n:(+n).toFixed(1))}" placeholder="0" ${dis}><button data-act="st:${d}:1" ${dis}>+</button></div><input class="in ${n&&!Number.isInteger(+n)?'bad':''}" data-f="dens:${d}" inputmode="numeric" value="${n?fmt(d*(+n)):''}" placeholder="0" ${dis}></div>`});
   h+=`<div class="op"><div class="d">Монеты</div><div></div><input class="in" data-f="coins" inputmode="decimal" value="${k.coins==null?'':fmt(k.coins)}" placeholder="0" ${dis}></div>
   <div class="op t"><div class="d">Наличные</div><div></div><div class="s num">${fmt(t.cash)}</div></div>
-  <div class="op"><div class="d">Карта<small>${k.cardAuto?'по пометкам':'вручную'}</small></div><div><span class="sw"><button class="${k.cardAuto?'on':''}" data-act="cardauto:1" ${dis}>авто</button><button class="${k.cardAuto?'':'on'}" data-act="cardauto:0" ${dis}>вручную</button></span></div>
-   ${k.cardAuto?`<div class="s num">${fmt(t.card)}</div>`:`<input class="in" data-f="cardm" inputmode="decimal" value="${k.cardManual==null?'':fmt(k.cardManual)}" placeholder="0" ${dis}>`}</div>`;
+  <div class="op"><div class="d">Карта${t.cardMarked&&t.cardMarked!==(+k.cardManual||0)?`<small><button class="lnk" style="font-size:11px" data-act="cardfill">по пометкам ${fmt(t.cardMarked)}</button></small>`:''}</div><div></div><input class="in" data-f="cardm" inputmode="decimal" value="${k.cardManual==null?'':fmt(k.cardManual)}" placeholder="0" ${dis}></div>`;
   k.out.forEach(o=>{h+=`<div class="op o"><input class="oin on" data-f="outn:${o.id}" value="${esc(o.name)}" placeholder="Выдано на…" ${dis}><input class="oin" data-f="outa:${o.id}" inputmode="decimal" value="${o.a==null?'':fmt(o.a)}" placeholder="0" ${dis}>${lk?'<span></span>':`<button class="x" data-act="delout:${o.id}">×</button>`}</div>`});
   if(!lk)h+=`<button class="addrow" data-act="addout">+ выдано (зарплата, аренда, другое)</button>`;
   h+=`<div class="op t"><div class="d" style="white-space:nowrap">Итого опись</div><div></div><div class="s num">${fmt(t.opis)}</div></div></div>`;
@@ -520,14 +519,12 @@ function renderBB(k){const el=$('#bb');if(!k||wide()){el.style.display='none';re
 function renderDrawer(){
   const L=live(),k=K();let h=`<div class="drh"><img class="logoi" src="icons/icon-192.png?v=1" alt=""><div><b>Касса КМЗ</b><span>${esc(S.settings.sign||'')}</span></div></div><div class="drb">
   <button class="dm" data-act="newk"><i>＋</i>Новая касса</button>
-  <button class="dm" data-act="summary"><i>📊</i>Сводка по неделям и месяцам</button>
   ${k?`<button class="dm" data-act="csv"><i>📗</i>Выгрузить в Excel</button>`:''}
-  ${k&&k.log&&k.log.length?`<button class="dm" data-act="logv"><i>🕘</i>Изменения после сдачи · ${k.log.length}</button>`:''}
   <button class="dm" data-act="backup"><i>💾</i>Резервная копия</button>
   <button class="dm" data-act="theme"><i>${document.documentElement.dataset.theme==='dark'?'☀️':'🌙'}</i>${document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}</button>
   <div class="dl">Кассы</div>`;
   let lastM='';L.forEach(x=>{const m=MON[pd(x.end).getMonth()]+' '+pd(x.end).getFullYear();if(m!==lastM){h+=`<div class="dl" style="margin-top:6px;text-transform:none">${m}</div>`;lastM=m}
-    const t=T(x);h+=`<button class="ki ${k&&x.id===k.id?'on':''}" data-act="open:${x.id}"><div class="a"><b>${ktitle(x)}${x.status==='done'?' ✓':''}</b><span>${fmt(t.zab)} · ${x.clients.length} кл.</span></div><span class="bd ${lvl(t.diff)}">${t.diff===0?'0':sgn(t.diff)}</span></button>`});
+    const t=T(x);h+=`<button class="ki ${k&&x.id===k.id?'on':''}" data-act="open:${x.id}"><div class="a"><b>${ktitle(x)}${x.status==='done'?' ✓':''}</b><span>${fmt(t.zab)} · ${x.clients.length} кл.</span></div><span class="bd ${lvl(t.diff)}">${t.diff===0?'0':sgn(t.diff)}</span><span class="kdel" data-act="delk2:${x.id}" title="Удалить">×</span></button>`});
   if(!L.length)h+=`<div class="note" style="padding:0 12px">Касс пока нет</div>`;
   $('#dr').innerHTML=h+'</div>'}
 
@@ -552,8 +549,7 @@ function edHTML(k,c){const lk=locked(k),dis=lk?'disabled':'',days=daysOf(k);
   <input class="fi" data-e="name" value="${esc(c.name)}" placeholder="Начни вводить имя" autocomplete="off" ${dis}>${lk?'':`<div class="sugg" id="sugg">${suggHTML(k,c)}</div>`}
   <div id="edDup"></div>
   <div class="lbl">Суммы ${k.type!=='day'?'(можно указать день недели)':''}</div><div id="edS">${sums}</div>
-  ${lk?'':`<button class="add" data-act="eadd">+ сумма</button><div class="qk"><button data-act="eall:n">Всё нал</button><button data-act="eall:c">Всё карта</button><button data-act="eall:">Без пометок</button></div>`}
-  <div class="lbl">Заметка</div><textarea class="fi" data-e="note" placeholder="например: переплатил 100, обмен" ${dis}>${esc(c.note||'')}</textarea>
+  ${lk?'':`<button class="add" data-act="eadd">+ сумма</button>`}
   <div class="row2">${lk?'':`<button class="btn r" data-act="edelc">Удалить клиента</button>`}<button class="btn" data-act="closesh">Готово</button></div>`}
 function edCur(){const k=K();if(!k||!shOn||!shOn.startsWith('ed:'))return[];return[k,k.clients.find(x=>x.id===shOn.slice(3))]}
 function edRefresh(){const[k,c]=edCur();if(!c)return;const f=document.activeElement&&document.activeElement.dataset.e;const v=document.activeElement&&document.activeElement.value;
@@ -698,6 +694,7 @@ document.addEventListener('click',e=>{
   case'nkm':readKF();nk.buhMode=p[1];drawKF(p[2]==='1');break;
   case'nkok':readKF();newKassa({type:nk.type,start:nk.start,end:nk.end,buhSum:nk.buhSum,buhMode:nk.buhMode});undoSt=[];persist();closeSheet();toast('Касса создана');break;
   case'kfok':readKF();mut(k=>{k.type=nk.type;k.start=nk.start;k.end=nk.end;k.buh={sum:nk.buhSum,mode:nk.buhMode}},'Период/сумма бухгалтерии изменены');closeSheet();break;
+  case'delk2':{e.stopPropagation();const x=S.kassas.find(y=>y.id===p[1]);if(x&&confirm('Удалить кассу '+ktitle(x)+' ('+fmt(T(x).zab)+')? Вернуть будет нельзя.')){const i=S.kassas.indexOf(x);S.kassas[i]={id:x.id,deleted:true,start:x.start,end:x.end,upd:Date.now()};if(S.cur===x.id)S.cur=null;undoSt=[];persist();render();toast('Касса удалена')}break}
   case'delk':if(confirm('Удалить кассу '+ktitle(k)+'? Отменить будет нельзя.')){const id=k.id;const i=S.kassas.findIndex(x=>x.id===id);S.kassas[i]={id,deleted:true,start:k.start,end:k.end,upd:Date.now()};S.cur=null;persist();closeSheet();toast('Касса удалена')}break;
   case'addc':{if(!k)return;if(locked(k)){askUnlock();return}snap();const c={id:uid(),name:'',sums:[{a:null,m:'',d:defDay(k)}],note:''};k.clients.push(c);touch(k);editClient(c.id,true);break}
   case'editc':editClient(p[1]);break;
@@ -708,6 +705,7 @@ document.addEventListener('click',e=>{
   case'fix':mut(k=>{const c=k.clients.find(x=>x.id===p[1]);const old=c.sums[+p[2]].a;c.sums[+p[2]].a=+p[3];logc(k,c.name+': '+fmt(old)+' → '+fmt(+p[3]))});toast('Исправлено');break;
   case'st':mut(k=>{const v=Math.max(0,Math.round(+k.opis[p[1]]||0)+ +p[2]);k.opis[p[1]]=v;logc(k,'Опись: '+fmt(+p[1])+' × '+v)},null);break;
   case'clearop':if(confirm('Очистить опись (купюры и монеты)?'))mut(k=>{k.opis={};k.coins=null},'Опись очищена');break;
+  case'cardfill':mut(k=>{k.cardManual=T(k).cardMarked||null});break;
   case'cardauto':mut(k=>{k.cardAuto=p[1]==='1';if(!k.cardAuto&&k.cardManual==null)k.cardManual=T(k).cardMarked||null});break;
   case'addout':mut(k=>k.out.push({id:uid(),name:'',a:null}));setTimeout(()=>{const ins=document.querySelectorAll('[data-f^="outn:"]');ins.length&&ins[ins.length-1].focus()},50);break;
   case'delout':mut(k=>{k.out=k.out.filter(o=>o.id!==p[1])},'Удалена строка выдано');break;
